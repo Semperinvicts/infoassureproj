@@ -103,7 +103,6 @@ input:focus {
   border-color: #3d6b35;
 }
 
-
 .panel-signup,
 .panel-signin,
 .panel-otp,
@@ -117,7 +116,6 @@ input:focus {
 .panel-appkey.active {
   display: block;
 }
-
 
 .pw-rules {
   margin-top: 8px;
@@ -141,7 +139,6 @@ input:focus {
 .pw-rule.fail {
   color: #c0392b;
 }
-
 
 .attempt-row {
   display: flex;
@@ -172,7 +169,6 @@ input:focus {
   opacity: 1;
 }
 
-
 .otp-subtitle {
   font-size: 0.85rem;
   color: #666;
@@ -200,7 +196,6 @@ input:focus {
 .otp-box:focus {
   border-color: #3d6b35;
 }
-
 
 .appkey-display {
   background: #f4f8f3;
@@ -244,6 +239,52 @@ input:focus {
   cursor: pointer;
 }
 
+/* SSO / Social Buttons */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0;
+  color: #aaa;
+  font-size: 0.82rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
+}
+
+.social-row {
+  display: flex;
+  gap: 14px;
+}
+
+.btn-social {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-social:hover {
+  border-color: #3d6b35;
+  background: #f7faf6;
+}
+
 .switch-row {
   margin-top: 22px;
   text-align: center;
@@ -256,7 +297,6 @@ input:focus {
   font-weight: 600;
   cursor: pointer;
 }
-
 
 .right {
   flex: 0 0 50%;
@@ -411,19 +451,10 @@ input:focus {
 }
 
 @keyframes shake {
-
   10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
+  90% { transform: translate3d(-1px, 0, 0); }
   30%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
+  70% { transform: translate3d(-4px, 0, 0); }
   40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
-  }
+  60% { transform: translate3d(4px, 0, 0); }
 }
