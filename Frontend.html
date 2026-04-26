@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started Now</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="mainBody">
+
+<section class="left">
+    <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+        <button class="tab-btn" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
+    </div>
+
+    <div class="panel-signup active" id="panelSignup">
+        <h1>Get Started Now</h1>
+        <div class="field"><label>Name</label><input type="text" id="suName" placeholder="Enter your name"></div>
+        <div class="field"><label>Email address</label><input type="email" id="suEmail" placeholder="Enter your email"></div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" id="suPassword" placeholder="Create a password" oninput="checkPwComplexity(this.value)">
+            <div class="pw-rules" id="pwRules">
+                <div class="pw-rule" id="rule-upper"><span class="rule-icon">○</span> At least one uppercase letter (A–Z)</div>
+                <div class="pw-rule" id="rule-lower"><span class="rule-icon">○</span> At least one lowercase letter (a–z)</div>
+                <div class="pw-rule" id="rule-length"><span class="rule-icon">○</span> Minimum 8 characters</div>
+            </div>
+        </div>
+        <button class="btn-primary" onclick="startSignup()">Signup</button>
+        <p class="switch-row">Have an account? <a onclick="switchTab('signin')">Sign In</a></p>
+    </div>
+
+    <div class="panel-signin" id="panelSignin">
+        <h1>Welcome Back</h1>
+        <div class="field"><label>Email address</label><input type="email" id="siEmail" placeholder="Enter your email"></div>
+        <div class="field">
+            <label>Password</label><input type="password" id="siPassword" placeholder="Enter your password">
+            <div class="attempt-row">
+                <div class="dot" id="dot1"></div><div class="dot" id="dot2"></div><div class="dot" id="dot3"></div>
+                <span class="error-msg" id="errMsg">Wrong password</span>
+            </div>
+        </div>
+        <button class="btn-primary" id="loginBtn" onclick="tryLogin()">Sign In</button>
+        <p class="switch-row">Don't have an account? <a onclick="switchTab('signup')">Sign Up</a></p>
+    </div>
+
+    <div class="panel-otp" id="panelOtp">
+        <button class="back-link" onclick="goBack()">&#8592; Back</button>
+        <h1>Verify It's You</h1>
+        <p class="otp-subtitle">We sent a code to <span id="otpTarget">your email</span>.</p>
+        <div class="otp-boxes">
+            <input class="otp-box" type="text" maxlength="1" id="otp1" oninput="otpMove(this, 'otp2')">
+            <input class="otp-box" type="text" maxlength="1" id="otp2" oninput="otpMove(this, 'otp3')">
+            <input class="otp-box" type="text" maxlength="1" id="otp3" oninput="otpMove(this, 'otp4')">
+            <input class="otp-box" type="text" maxlength="1" id="otp4" oninput="otpMove(this, 'otp5')">
+            <input class="otp-box" type="text" maxlength="1" id="otp5" oninput="otpMove(this, 'otp6')">
+            <input class="otp-box" type="text" maxlength="1" id="otp6" oninput="otpMove(this, null)">
+        </div>
+        <button class="btn-primary" onclick="verifyOtp()">Verify Code</button>
+    </div>
+
+    <div class="panel-appkey" id="panelAppkey">
+        <h1>App Key</h1>
+        <p class="appkey-subtitle">Your unique AppKey for authentication.</p>
+        <div class="appkey-display">
+            <span id="appKeyValue">AK-XXXX-XXXX-XXXX</span>
+            <button class="appkey-copy-btn" onclick="copyAppKey()">Copy</button>
+        </div>
+        <div class="field">
+            <label>Enter AppKey to confirm</label>
+            <input type="text" id="appKeyInput" placeholder="Paste your AppKey here">
+        </div>
+        <button class="btn-primary" onclick="confirmAppKey()">Continue to Dashboard</button>
+    </div>
+</section>
+
+<section class="right" id="rightPanel">
+    <div class="right-bg"></div>
+    <div class="leaf leaf-1"></div>
+    <div class="leaf leaf-2"></div>
+    <div class="leaf leaf-3"></div>
+    <div class="eye-scene">
+        <div class="eye-label" id="eyeLabel">watching you</div>
+        <div class="eyes-row">
+            <div class="eye-wrapper">
+                <div class="brow"><svg viewBox="0 0 180 22"><path class="brow-path" id="browL" d="M 20,16 Q 90,16 160,16"/></svg></div>
+                <div class="eye-outer"><div class="eye-white"><div class="iris-wrap" id="irisL"><div class="iris"><div class="pupil"></div></div></div></div></div>
+            </div>
+            <div class="eye-wrapper">
+                <div class="brow"><svg viewBox="0 0 180 22"><path class="brow-path" id="browR" d="M 20,16 Q 90,16 160,16"/></svg></div>
+                <div class="eye-outer"><div class="eye-white"><div class="iris-wrap" id="irisR"><div class="iris"><div class="pupil"></div></div></div></div></div>
+            </div>
+        </div>
+        <div class="warning-text" id="warnText">⚠ &nbsp; INTRUSION DETECTED — ACCESS DENIED</div>
+    </div>
+</section>
+
+<div id="cursor"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
