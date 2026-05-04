@@ -9,12 +9,10 @@ const { createClient } = require("@supabase/supabase-js");
 
 dotenv.config();
 const app = express();
-const port = process.env.port;
-console.log('Your port is' + port);
 
 const PORT = 3000;
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+const supabase = createClient('https://yydsvsxwfmmbqulksijf.supabase.co', 'sb_publishable_0c0LrkdSnFu0j7LPSwLkzA_X1YThzmp');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
@@ -32,10 +30,18 @@ app.post("/signup", async (req, res) => {
         password: password,
         options: {
             data: {
-                username: name
+                display_name: name
             }
         }
     });
+
+    if (error) {
+        console.log(`login error: ${error}`)
+    }
+
+    console.log(`Welcome ${data.user.user_metadata.display_name}!`)
+
+    console.log("signup reached here");
     //add the error handling and success page here 
 });
 
@@ -87,3 +93,8 @@ app.get("/logout", (req, res) => {+
     res.clearCookie("access_token");
     res.redirect("/")
 })
+
+app.listen(PORT,
+     () => {
+    console.log(`Server running at http:/localhost:${PORT}/`);
+});
