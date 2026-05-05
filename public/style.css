@@ -19,6 +19,31 @@ body.angry {
   background-color: #1a0000;
 }
 
+.left.angry-mode {
+  animation: pulse-red 0.5s forwards;
+}
+
+.left.angry-mode h1,
+.left.angry-mode label,
+.left.angry-mode .divider,
+.left.angry-mode .switch-row,
+.left.angry-mode .switch-row a {
+  color: #900;
+  transition: color 0.5s;
+}
+
+.left.angry-mode input {
+  border-color: #ff3333;
+  background-color: #fff0f0;
+  color: #900;
+}
+
+@keyframes pulse-red {
+  0% { background-color: #fff; }
+  50% { background-color: #ffcccc; }
+  100% { background-color: #ffe6e6; }
+}
+
 .left {
   flex: 0 0 50%;
   display: flex;
@@ -97,6 +122,7 @@ input[type="password"] {
   color: #111;
   outline: none;
   background: #fff;
+  transition: all 0.3s ease;
 }
 
 input:focus {
