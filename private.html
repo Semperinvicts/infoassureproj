@@ -235,7 +235,7 @@
     <div class="topbar-right">
       <div class="user-chip">
         <span class="user-dot"></span>
-        <span id="dashUser">student@cscn.edu</span>
+        <span id="dashUser">{{email}}</span>
       </div>
       <button class="btn-logout" onclick="logout()">Sign out</button>
     </div>
@@ -300,6 +300,16 @@
         wrap.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px))`;
       });
     });
+    function logout() {
+        window.location.href = "/logout";
+      }
+        window.USER = {
+            name: "{{name}}",
+            email: "{{email}}"
+          };
+    document.getElementById("name").innerText = window.USER.name;
+    document.getElementById("email").innerText = window.USER.email;
+      
   </script>
 </body>
 </html>

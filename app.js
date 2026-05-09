@@ -13,7 +13,7 @@ const app = express();
 const PORT = 3000;
 
 const supabase = createClient('https://yydsvsxwfmmbqulksijf.supabase.co', 'sb_publishable_0c0LrkdSnFu0j7LPSwLkzA_X1YThzmp');
-
+app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(express.static("public"));
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
-    const { user, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
         options: {
@@ -35,13 +35,31 @@ app.post("/signup", async (req, res) => {
         }
     });
 
+
     if (error) {
-        console.log(`login error: ${error}`)
+        console.log(error.message);
+        return;
     }
 
-    console.log(`Welcome ${data.user.user_metadata.display_name}!`)
+    if (!data.session) {
+        console.log("No session yet (email confirmation likely required)");
+        return;
+    }
+
+    const token = data.session?.access_token;
+
+    if (token) {
+        res.cookie("access_token", token, { httpOnly: true });
+    }
+    console.log(`Welcome ${data.user?.user_metadata?.display_name || "User"}!`);
+
 
     console.log("signup reached here");
+
+    res.redirect("/success");
+
+
+
     //add the error handling and success page here 
 });
 
@@ -50,16 +68,35 @@ app.post("/login", async (req, res) => {
     const { data, error } = await supabase.auth.signInWithPassword({email, password}) 
     //add the error handling and success page here
 
-    res.cookie("access_token", data.session.access_token, { httpOnly: true });
+    if (error) {
+        console.log(`error: ${error}`);
+        return
+    }
+
+    res.cookie("access_token", data.session.access_token, {
+        httpOnly: true
+    });
+
+    res.redirect("/private");
 });
 
 app.post("/googleSSO", async (req, res) => {
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+            redirectTo: "http://localhost:3000/callback"
+        }        
     })
+    if (error) {
+        console.log(`error: ${error}`);
+        return
+    }
 
-    res.cookie("access_token", data.session.access_token, { httpOnly: true });
+    res.redirect(data.url);
+
+    
+
 
     //add the error handling and success page here
 
@@ -77,6 +114,20 @@ app.post("/appleSSO", async (req, res) => {
 
 });
 
+app.post("/set-cookie", (req, res) => {
+    const { token } = req.body;
+
+    res.cookie("access_token", token, {
+        httpOnly: true
+    });
+
+    res.sendStatus(200);
+});
+
+app.get("/callback", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/callback.html"));
+});
+
 app.get("/private", async (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.redirect("/");
@@ -84,15 +135,53 @@ app.get("/private", async (req, res) => {
     const { data, error } = await supabase.auth.getUser(token);
     if (error) return res.redirect("/");
 
-    const filePath = path.join(__dirname, "private.html");
+    const user = data.user;
+
+    let html = fs.readFileSync(
+        path.join(__dirname, "private.html"), "utf-8"
+    );
+
+    html = html
+        .replace("{{name}}", user.user_metadata.display_name || "User")
+        .replace("{{email}}", user.email);
+
+    res.send(html);
     
     //add user data in the html or something 
 });
 
-app.get("/logout", (req, res) => {+
+
+app.get("/success", async (req, res) => {
+
+    const token = req.cookies.access_token;
+
+    if (!token) return res.redirect("/");
+    console.log("Token obtainted");
+    const { data, error } = await supabase.auth.getUser(token);
+    console.log("data obtained!!!!!!");
+
+    if (error || !data || !data.user) {
+        console.log({ data, error });
+    };
+
+    if (error || !data?.user) return res.redirect("/");
+    console.log("data user obtained!!!!!!");
+
+    const filePath = path.join(__dirname, "public/success.html");
+
+    return res.sendFile(filePath);
+});
+
+
+
+app.get("/logout", (req, res) => {
     res.clearCookie("access_token");
     res.redirect("/")
 })
+
+
+
+
 
 app.listen(PORT,
      () => {
