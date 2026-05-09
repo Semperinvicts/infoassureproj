@@ -19,8 +19,8 @@ https://www.youtube.com/watch?v=DdMIKKBVv5M
 
 ## Anyway after that setup na natin to guys 
 
-Add this repo to your vscode:
-git clone Semperinvicts/infoassureproj 
+Add this repo to your vscode using the terminal:
+`git clone Semperinvicts/infoassureproj `
 
 (OK guys di aq actually sure kung pano to i add pa-google nlng sana)
 
@@ -32,6 +32,8 @@ type `node app.js` in terminal
 ### If you want to make changes to code: 
 
 Download nodemon (npm install -g nodemon) and run `nodemon app.js ` in terminal 
+
+Disclaimer: i dont recommend changing the code ipadebug nyo nlng po sakin (clarize) pls
 
 
 ## Final final step na guys 
