@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signing you in...</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+         .success-split {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .left {
+            flex: 0 0 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 52px 72px;
+            background: #fff;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            margin-bottom: 16px;
+        }
+
+        .body-text {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #c8dfc4;
+            border-top: 3px solid #3d6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-primary {
+            padding: 14px;
+            background: #3d6b35;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .right {
+            flex: 0 0 50%;
+            position: relative;
+            background: radial-gradient(ellipse at 70% 30%, #a8cc8c 0%, #6fa35a 40%, #3d6b35 80%, #1e3a18 100%);
+        }
+
+        .right-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .right-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="success-split">
+
+        <div class="left">
+            <div class="loader"></div>
+            <h1>Signing you in...</h1>
+            <p class="body-text">Please wait while we securely log you into your account.</p>
+            <a href="/" class="btn-primary">Cancel</a>
+        </div>
+
+        <div class="right">
+            <div class="right-content">
+                <h2 class="right-heading">Secure login in progress</h2>
+                <p>We’re connecting your Google account and preparing your session.</p>
+            </div>
+        </div>
+        
+
+    </div>
+
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+        'https://yydsvsxwfmmbqulksijf.supabase.co',
+        'sb_publishable_0c0LrkdSnFu0j7LPSwLkzA_X1YThzmp'
+    );
+
+    console.log("FULL URL:", window.location.href);
+
+    const { data, error } = await supabase.auth.getSession();
+
+    console.log("SESSION DATA:", data);
+    console.log("SESSION ERROR:", error);
+
+    if (data.session) {
+        const token = data.session.access_token;
+
+        console.log("TOKEN:", token);
+
+        const response = await fetch("/set-cookie", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ token })
+        });
+
+        console.log("COOKIE RESPONSE:", response.status);
+
+        window.location.href = "/private";
+    } else {
+        console.log("NO SESSION FOUND");
+        window.location.href = "/";
+    }
+</script>
+
+</body>
+
+</html>
