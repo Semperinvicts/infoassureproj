@@ -25,43 +25,24 @@ app.get("/", (req, res) => {
 
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
+
     const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
+        email,
+        password,
         options: {
-            data: {
-                display_name: name
-            }
+            data: { display_name: name }
         }
     });
 
-
     if (error) {
         console.log(error.message);
-        return;
+        return res.status(400).send(error.message);
     }
 
-    if (!data.session) {
-        console.log("No session yet (email confirmation likely required)");
-        return;
-    }
-
-    const token = data.session?.access_token;
-
-    if (token) {
-        res.cookie("access_token", token, { httpOnly: true });
-    }
-    console.log(`Welcome ${data.user?.user_metadata?.display_name || "User"}!`);
-
-
-    console.log("signup reached here");
-
-    res.redirect("/success");
-
-
-
-    //add the error handling and success page here 
+    console.log("User created, check email for verification");
+    return res.redirect("/success");
 });
+
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
@@ -153,7 +134,7 @@ app.get("/private", async (req, res) => {
 
 app.get("/success", async (req, res) => {
 
-    const token = req.cookies.access_token;
+/*     const token = req.cookies.access_token;
 
     if (!token) return res.redirect("/");
     console.log("Token obtainted");
@@ -166,7 +147,7 @@ app.get("/success", async (req, res) => {
 
     if (error || !data?.user) return res.redirect("/");
     console.log("data user obtained!!!!!!");
-
+ */
     const filePath = path.join(__dirname, "public/success.html");
 
     return res.sendFile(filePath);
